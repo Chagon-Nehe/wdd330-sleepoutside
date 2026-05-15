@@ -13,3 +13,22 @@ export function getParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
 }
+
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
+  //Clear the element if clear is true
+  if (clear) {
+    parentElement.innerHTML = " ";
+  }
+
+  // Convert each item in the list to HTML using the template function
+  const htmlStrings = list.map(templateFn);
+
+  //Insert the HTML into DOM
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
