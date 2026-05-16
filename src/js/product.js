@@ -6,7 +6,8 @@ const dataSource = new ProductData("tents");
 // add product to cart function
 function addProductToCart(product) {
   let cartItems = getLocalStorage("so-cart"); // get cart items from local storage
-  if (!Array.isArray(cartItems)) {    // if cart items is not an array, initialize it as an empty array
+  if (!Array.isArray(cartItems)) {
+    // if cart items is not an array, initialize it as an empty array
     cartItems = [];
   }
 
