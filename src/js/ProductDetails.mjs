@@ -33,12 +33,12 @@ function productDetailsTemplate(product) {
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
   const productImage = document.querySelector(".product-image");
-  productImage.src = `../images/tents/${product.Image}`;
-  productImage.alt = `${product.Brand.name} ${product.NameWithoutBrand}`;
+  productImage.src = product.Image;
+  productImage.alt = product.NameWithoutBrand;
 
   document.getElementById("productDesc").innerHTML = product.DescriptionHtmlsimple;
-  document.getElementById("productPrice").textContent = `$${product.Price}`;
+  document.getElementById("productPrice").textContent = product.FinalPrice;
   document.getElementById("productColor").textContent = product.Colors[0].colorName;
 
-  document.getElementById("addToCart").dataset.productId = product.Id;
+  document.getElementById("addToCart").dataset.id = product.Id;
 }
