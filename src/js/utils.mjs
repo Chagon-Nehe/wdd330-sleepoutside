@@ -31,4 +31,8 @@ export function getParam(param) {
   return product;
 }
 
-//export const getParam = (param) => urlParams.get(param);
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlString = list.map((item) => template(item)).join("");
+  if (clear) parentElement.innerHTML = "";
+  parentElement.insertAdjacentHTML(position, htmlString);
+}
