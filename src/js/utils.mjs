@@ -39,3 +39,16 @@ export function renderListWithTemplate(template, parentElement, list, position =
   }
   parentElement.insertAdjacentHTML(position, htmlString.join(""));
 }
+
+// Function to remove an item from the cart array by its ID
+export function removeFromCart(productId) {
+  // 1. Get current cart items
+  let cartItems = getLocalStorage("so-cart") || [];
+  
+  // 2. Filter out the item we want to remove
+  // This creates a new array containing ONLY items that DO NOT match the productId
+  cartItems = cartItems.filter(item => item.Id !== productId);
+  
+  // 3. Save the clean array back to local storage
+  setLocalStorage("so-cart", cartItems);
+}
