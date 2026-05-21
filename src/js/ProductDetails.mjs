@@ -3,6 +3,7 @@ import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 export default class ProductDetails {
   constructor(productId, dataSource) {
     this.productId = productId;
+    this.product = {};
     this.dataSource = dataSource;
   }
   // render product details to the page
@@ -13,7 +14,7 @@ export default class ProductDetails {
     // add to cart button event handler
     document
       .getElementById("addToCart")
-      .addEventListener("click", this.addToCartHandler.bind(this));
+      .addEventListener("click", this.addProductToCart.bind(this));
       
 
   }
@@ -32,13 +33,14 @@ function productDetailsTemplate(product) {
   document.querySelector("h2").textContent = product.Brand.name;
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
-  const productImage = document.querySelector(".product-image");
+  const productImage = document.getElementById("productImage");
   productImage.src = product.Image;
   productImage.alt = product.NameWithoutBrand;
 
-  document.getElementById("productDesc").innerHTML = product.DescriptionHtmlsimple;
+  
   document.getElementById("productPrice").textContent = product.FinalPrice;
   document.getElementById("productColor").textContent = product.Colors[0].colorName;
+  document.getElementById("productDesc").innerHTML = product.DescriptionHtmlSimple;
 
   document.getElementById("addToCart").dataset.id = product.Id;
 }
