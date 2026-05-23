@@ -241,6 +241,35 @@ button {
   grid-column: 3;
 }
 
+.product-card__price{
+  color: black;
+  font-size: 2rem;
+  font-weight: 150;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: gray;
+  margin-right: 10px;
+}
+
+.sale-price {
+  color: #d62828;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.discount-badge {
+  background-color: #d62828;
+  color: white;
+
+  padding: 4px 8px;
+  border-radius: 6px;
+
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
