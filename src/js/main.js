@@ -3,7 +3,8 @@ import ProductList from "./ProductList.mjs";
 import Alert from "./Alert.js";
 
 const dataSource = new ProductData("tents");
-const productList = new ProductList("tents", dataSource, document.getElementById("product-list"));
+const element = document.querySelector(".product-list");
+const productList = new ProductList("tents", dataSource, element);
 
 // Initialize the alerts
 const myAlerts = new Alert();
@@ -20,10 +21,5 @@ async function init() {
 }
 init();
 
-const dataSource = new ProductData("tents");
 
-const element = document.querySelector(".product-list");
-
-const productList = new ProductList("Tents", dataSource, element);
-
-productList.init();
+//productList.init();
