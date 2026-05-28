@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time out</title>
+    <script src="SetTimeOut.js" type="module"></script>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #ede2ca;
+    "
+  >
+    <h1 id="countdown"></h1>
+    <form
+      id="timeForm"
+      style="color: rgb(23, 19, 19); font-size: 20px; font-weight: bold"
+    >
+      <label for="timeInput">Enter time in seconds:</label>
+      <input type="number" id="timeInput" name="timeInput" min="1" required />
+      <button id="startButton" type="submit">Start</button>
+    </form>
+  </body>
+</html>

@@ -22,6 +22,8 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener("click", callback);
 }
 
+
+// get query string parameter value by id
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -30,12 +32,23 @@ export function getParam(param) {
 }
 
 export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
-  const htmlStrings = list.map(template);
-  // if clear is true we need to clear out the contents of the parent.
+  const htmlString = list.map(template);
+
   if (clear) {
     parentElement.innerHTML = "";
   }
+  parentElement.insertAdjacentHTML(position, htmlString.join(""));
+}
 
-
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+// Function to remove an item from the cart array by its ID
+export function removeFromCart(productId) {
+  // 1. Get current cart items
+  let cartItems = getLocalStorage("so-cart") || [];
+  
+  // 2. Filter out the item we want to remove
+  // This creates a new array containing ONLY items that DO NOT match the productId
+  cartItems = cartItems.filter(item => item.Id !== productId);
+  
+  // 3. Save the clean array back to local storage
+  setLocalStorage("so-cart", cartItems);
 }
