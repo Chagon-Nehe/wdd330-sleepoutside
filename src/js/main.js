@@ -12,14 +12,12 @@ myAlerts.init();
 
 // Initialize the product list
 async function init() {
-    try {
-        await productList.init();
-    } catch (error) {
-       // console.error("Error fetching product data:", error);
-    }
-    
+  try {
+    await productList.init();
+  } catch (error) {
+    // console.error("Error fetching product data:", error);
+  }
 }
 init();
-
 
 //productList.init();
