@@ -73,5 +73,12 @@ export default class ProductList {
       "afterbegin",
       true,
     );
+    renderListWithTemplate(
+      productCardTemplate,
+      this.listElement,
+      list,
+      "afterbegin",
+      true,
+    );
   }
 }

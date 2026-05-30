@@ -241,7 +241,7 @@ button {
   grid-column: 3;
 }
 
-.product-card__price{
+.product-card__price {
   color: black;
   font-size: 2rem;
   font-weight: 150;
