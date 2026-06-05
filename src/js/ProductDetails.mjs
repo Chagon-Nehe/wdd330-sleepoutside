@@ -1,6 +1,64 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
-const baseURL = import.meta.env.VITE_SERVER_URL;
+//const baseURL = import.meta.env.VITE_SERVER_URL;
+
+// Helper function to populate the HTML layout and calculate discounts
+function productDetailsTemplate(product) {
+  // Brand and Name
+  document.querySelector(".product-brand").textContent =
+    product.Brand?.Name || "";
+  document.querySelector(".product-name").textContent =
+    product.NameWithoutBrand || product.Name;
+
+  // Product Image (Using PrimaryLarge)
+  const productImage = document.getElementById("productImage");
+  if (productImage) {
+    productImage.src = product.Images?.PrimaryLarge?.Url || "";
+    productImage.alt = product.NameWithoutBrand || product.Name;
+  }
+
+  // Color and Description
+  const colorElement = document.getElementById("productColor");
+  if (colorElement) {
+    colorElement.textContent =
+      product.Colors && product.Colors.length
+        ? product.Colors[0].ColorName
+        : "";
+  }
+
+  const descElement = document.getElementById("productDesc");
+  if (descElement) {
+    descElement.innerHTML = product.DescriptionHtmlSimple || "";
+  }
+
+  // Set data ID on the cart button
+  const cartBtn = document.getElementById("addToCart");
+  if (cartBtn) {
+    cartBtn.dataset.id = product.Id;
+  }
+
+  // Smart Price Display (Handles Discounts)
+  const priceElement = document.getElementById("productPrice");
+  if (priceElement) {
+    const isDiscounted = product.FinalPrice < product.SuggestedRetailPrice;
+
+    if (isDiscounted) {
+      const discountPercent = Math.round(
+        ((product.SuggestedRetailPrice - product.FinalPrice) /
+          product.SuggestedRetailPrice) *
+          100,
+      );
+
+      priceElement.innerHTML = `
+        <del class="original-price">$${product.SuggestedRetailPrice.toFixed(2)}</del>
+        <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
+        <span class="discount-badge">${discountPercent}% OFF</span>
+      `;
+    } else {
+      priceElement.textContent = `$${product.FinalPrice.toFixed(2)}`;
+    }
+  }
+}
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -9,124 +67,45 @@ export default class ProductDetails {
     this.dataSource = dataSource;
   }
 
-  // Initialize and load the data
+  // Initialize data, render layout, and bind actions
   async init() {
     this.product = await this.dataSource.findProductById(this.productId);
+
+    const container = document.querySelector(".product-detail");
+    if (!this.product || !this.product.Id) {
+      if (container) container.innerHTML = "<p>Product not found</p>";
+      return;
+    }
+
+    // Render the product onto the page
     this.renderProductDetails();
 
+    // Attach event listener to the button now that it exists in the DOM
     const addToCartBtn = document.getElementById("addToCart");
     if (addToCartBtn) {
       addToCartBtn.addEventListener("click", this.addProductToCart.bind(this));
     }
   }
 
+  // Adds the current product into local storage safely
   addProductToCart() {
-    if (!this.product) return;
-    const cartItems = getLocalStorage("so-cart") || [];
-    cartItems.push(this.product);
-    setLocalStorage("so-cart", cartItems);
-    alert(`${this.product.NameWithoutBrand || this.product.Name} added to cart!`);
-  }
+    if (!this.product || !this.product.Id) return;
 
-  renderProductDetails() {
-    const product = this.product;
-    const container = document.querySelector(".product-detail");
-
-    if (!product || !product.Id) {
-      container.innerHTML = "<p>Product not found</p>";
-      return;
-    }
-
-    // Use PrimaryLarge image URL for product details
-    const imgSrc = product.Images?.PrimaryLarge?.Url || "";
-
-    container.innerHTML = `
-      <h3>${product.Brand?.Name || ""}</h3>
-
-      <h2 class="divider">
-        ${product.NameWithoutBrand}
-      </h2>
-
-      <img
-        class="divider"
-        src="${imgSrc}"
-        alt="${product.NameWithoutBrand}"
-      />
-
-      <p class="product-card__price">
-        $${product.FinalPrice}
-      </p>
-
-      <p class="product__color">
-        ${product.Colors && product.Colors.length ? product.Colors[0].ColorName : ""}
-      </p>
-
-      <p class="product__description">
-        ${product.DescriptionHtmlSimple}
-      </p>
-
-      <div class="product-detail__add">
-        <button id="addToCart">
-          Add to Cart
-        </button>
-      </div>
-    `;
-    // Add listener to the Add to Cart button
-    document
-      .getElementById("addToCart")
-      .addEventListener("click", this.addProductToCart.bind(this));
-  }
-
-  // Push item to local storage array
-  addProductToCart() {
     let cartItems = getLocalStorage("so-cart");
     if (!Array.isArray(cartItems)) {
       cartItems = [];
     }
+
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
+
+    alert(
+      `${this.product.NameWithoutBrand || this.product.Name} added to cart!`,
+    );
   }
 
-  // Call the external template function
+  // Delegates UI updates to the template builder
   renderProductDetails() {
     productDetailsTemplate(this.product);
-  }
-}
-
-// External helper function to populate the HTML
-function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Brand.Name;
-  document.querySelector("h3").textContent = product.NameWithoutBrand;
-
-  // Set up product image
-  const productImage = document.getElementById("productImage");
-  productImage.src = product.Image;
-  productImage.alt = product.NameWithoutBrand;
-
-  // Set up descriptions and colors
-  document.getElementById("productColor").textContent =
-    product.Colors[0].ColorName;
-  document.getElementById("productDesc").innerHTML =
-    product.DescriptionHtmlSimple;
-  document.getElementById("addToCart").dataset.id = product.Id;
-
-  // Smart Price Display (Handles Discounts)
-  const priceElement = document.getElementById("productPrice");
-  const isDiscounted = product.FinalPrice < product.SuggestedRetailPrice;
-
-  if (isDiscounted) {
-    const discountPercent = Math.round(
-      ((product.SuggestedRetailPrice - product.FinalPrice) /
-        product.SuggestedRetailPrice) *
-        100,
-    );
-
-    priceElement.innerHTML = `
-      <span class="original-price">$${product.SuggestedRetailPrice}</span>
-      <span class="sale-price">$${product.FinalPrice}</span>
-      <span class="discount-badge">${discountPercent}% OFF</span>
-    `;
-  } else {
-    priceElement.textContent = `$${product.FinalPrice}`;
   }
 }

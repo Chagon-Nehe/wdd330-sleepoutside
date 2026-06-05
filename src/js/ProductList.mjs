@@ -1,7 +1,7 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
+// Helper function to generate HTML template for a single product
 function productCardTemplate(product) {
-  // Use PrimaryMedium image URL for listing images
   const imageUrl = product.Images?.PrimaryMedium?.Url || "";
 
   return `
@@ -21,37 +21,37 @@ export default class ProductList {
     this.category = category;
     this.dataSource = dataSource;
     this.listElement = listElement;
+    this.products = []; // Initialize to store data for sorting
   }
 
   async init() {
-    this.list = await this.dataSource.getData(this.category);
-    this.renderList(this.list);
+    // Fetch product data based on category
+    const list = await this.dataSource.getData(this.category);
+    this.products = list;
+
+    // Render the initial list
+    this.renderList(this.products);
+
+    // Set up sorting event listener
+    const sortSelect = document.getElementById("sortProducts");
+    if (sortSelect) {
+      sortSelect.addEventListener("change", (e) => {
+        this.sortProducts(e.target.value);
+      });
+    }
   }
 
-  renderList(products) {
+  renderList(list) {
+    // Clear existing content if your utility requires it, or rely on its internal logic
+    this.listElement.innerHTML = "";
+
     renderListWithTemplate(
       productCardTemplate,
       this.listElement,
-      products,
+      list,
       "afterbegin",
-      true
-    this.products = [];
-  }
-
-  async init() {
-    // const list = await this.dataSource.getData();
-    // this.renderList(list);
-    this.products = await this.dataSource.getData(this.category);
-    console.log(this.products);
-
-    this.renderList(this.products);
-
-    const sortSelect = document.getElementById("sortProducts");
-
-    sortSelect.addEventListener("change", (e) => {
-      // console.log(e.target.value);
-      this.sortProducts(e.target.value);
-    });
+      true,
+    );
   }
 
   sortProducts(sortType) {
@@ -75,27 +75,7 @@ export default class ProductList {
         break;
     }
 
+    // Re-render with the newly sorted array
     this.renderList(sortedProducts);
-  }
-
-  renderList(list) {
-    // const htmlStrings = list.map(productCardTemplate);
-    // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
-
-    // apply use new utility function instead of the commented code above
-    renderListWithTemplate(
-      productCardTemplate,
-      this.listElement,
-      list,
-      "afterbegin",
-      true,
-    );
-    renderListWithTemplate(
-      productCardTemplate,
-      this.listElement,
-      list,
-      "afterbegin",
-      true,
-    );
   }
 }

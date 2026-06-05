@@ -1,13 +1,16 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+import { loadHeaderFooter, getParam } from "./utils.mjs";
 
-function getCategoryFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("category") || "tents";
-}
+// Load header and footer content from external HTML files
+loadHeaderFooter();
 
-const category = getCategoryFromUrl();
+const category = getParam("category") || "tents"; // Default to 'tents' if no category is provided
 const listElement = document.querySelector(".product-list");
+
+
+
+
 
 // Update page title dynamically based on category
 const titleElement = document.querySelector("section.products > h2");
