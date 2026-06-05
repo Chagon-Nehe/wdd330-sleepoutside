@@ -290,3 +290,19 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+.category-list {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+}
+
+.category-list li {
+  text-align: center;
+}
+
+.category-list img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
