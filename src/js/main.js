@@ -1,23 +1,20 @@
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
+//import ProductData from "./ProductData.mjs";
+//import ProductList from "./ProductList.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
 import Alert from "./Alert.js";
 
-const dataSource = new ProductData("tents");
-const element = document.querySelector(".product-list");
-const productList = new ProductList("tents", dataSource, element);
+// Load header and footer content from external HTML files
+loadHeaderFooter();
 
 // Initialize the alerts
 const myAlerts = new Alert();
 myAlerts.init();
 
-// Initialize the product list
-async function init() {
-  try {
-    await productList.init();
-  } catch (error) {
-    // console.error("Error fetching product data:", error);
-  }
-}
-init();
+/*const dataSource = new ProductData("tents");
+const element = document.querySelector(".product-list");
+const productList = new ProductList("tents", dataSource, element);
 
-//productList.init();
+
+
+// Initialize the product list
+productList.init();*/

@@ -5,6 +5,14 @@ export default class ProductData {
     // no params needed
   }
 
+  async convertToJson(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+  }
+
   async getData(category) {
     const response = await fetch(`${baseURL}products/search/${category}`);
     const data = await this.convertToJson(response);
@@ -14,13 +22,8 @@ export default class ProductData {
   async findProductById(id) {
     const response = await fetch(`${baseURL}product/${id}`);
     const data = await this.convertToJson(response);
-    return data.Result;
-  }
+    //console.log(data.Result);
 
-  async convertToJson(response) {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
+    return data.Result;
   }
 }
