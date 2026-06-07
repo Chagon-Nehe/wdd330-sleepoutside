@@ -1,3 +1,88 @@
+// import { renderListWithTemplate } from "./utils.mjs";
+
+// function productCardTemplate(product) {
+//   return `
+//     <li class="product-card">
+//       <a href="product_pages/?products=${product.Id}">
+//         <img src="${product.Image}" alt="${product.Name}">
+//         <h2>${product.Brand.Name}</h2>
+//         <h3>${product.Name}</h3>
+//         <p class="product-card__price">$${product.FinalPrice}</p>
+//       </a>
+//     </li>
+//     `;
+// }
+
+// export default class ProductList {
+//   constructor(category, dataSource, listElement) {
+//     this.category = category;
+//     this.dataSource = dataSource;
+//     this.listElement = listElement;
+//     this.products = [];
+//   }
+
+//   async init() {
+//     // const list = await this.dataSource.getData();
+//     // this.renderList(list);
+//     this.products = await this.dataSource.getData(this.category);
+//     console.log(this.products);
+
+//     this.renderList(this.products);
+
+//     const sortSelect = document.getElementById("sortProducts");
+
+//     sortSelect.addEventListener("change", (e) => {
+//       // console.log(e.target.value);
+//       this.sortProducts(e.target.value);
+//     });
+//   }
+
+//   sortProducts(sortType) {
+//     const sortedProducts = [...this.products];
+
+//     switch (sortType) {
+//       case "name-asc":
+//         sortedProducts.sort((a, b) => a.Name.localeCompare(b.Name));
+//         break;
+
+//       case "name-desc":
+//         sortedProducts.sort((a, b) => b.Name.localeCompare(a.Name));
+//         break;
+
+//       case "price-asc":
+//         sortedProducts.sort((a, b) => a.FinalPrice - b.FinalPrice);
+//         break;
+
+//       case "price-desc":
+//         sortedProducts.sort((a, b) => b.FinalPrice - a.FinalPrice);
+//         break;
+//     }
+
+//     this.renderList(sortedProducts);
+//   }
+
+//   renderList(list) {
+//     // const htmlStrings = list.map(productCardTemplate);
+//     // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
+
+//     // apply use new utility function instead of the commented code above
+//     renderListWithTemplate(
+//       productCardTemplate,
+//       this.listElement,
+//       list,
+//       "afterbegin",
+//       true,
+//     );
+//     renderListWithTemplate(
+//       productCardTemplate,
+//       this.listElement,
+//       list,
+//       "afterbegin",
+//       true,
+//     );
+//   }
+// }
+
 import { renderListWithTemplate } from "./utils.mjs";
 
 // Helper function to generate HTML template for a single product
@@ -6,11 +91,11 @@ function productCardTemplate(product) {
 
   return `
     <li class="product-card">
-      <a href="../product_pages/index.html?id=${product.Id}">
-        <img src="${imageUrl}" alt="${product.Name}" />
-        <h3 class="card_brand">${product.Brand?.Name || ""}</h3>
-        <h2 class="card_name">${product.Name}</h2>
-        <p class="product-card_price">$${product.FinalPrice}</p>
+      <a href="/product_pages/?product=${product.Id}">
+        <img src="${product.Images.PrimaryMedium}" alt="${product.Name}">
+        <h3>${product.Brand.Name}</h3>
+        <p>${product.NameWithoutBrand}</p>
+        <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
     </li>
   `;
@@ -21,61 +106,21 @@ export default class ProductList {
     this.category = category;
     this.dataSource = dataSource;
     this.listElement = listElement;
-    this.products = []; // Initialize to store data for sorting
   }
 
   async init() {
-    // Fetch product data based on category
     const list = await this.dataSource.getData(this.category);
-    this.products = list;
-
-    // Render the initial list
-    this.renderList(this.products);
-
-    // Set up sorting event listener
-    const sortSelect = document.getElementById("sortProducts");
-    if (sortSelect) {
-      sortSelect.addEventListener("change", (e) => {
-        this.sortProducts(e.target.value);
-      });
-    }
+    this.renderList(list);
+    document.querySelector(".title").textContent = this.category;
   }
 
   renderList(list) {
-    // Clear existing content if your utility requires it, or rely on its internal logic
-    this.listElement.innerHTML = "";
+    // const htmlStrings = list.map(productCardTemplate);
+    // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
 
-    renderListWithTemplate(
-      productCardTemplate,
-      this.listElement,
-      list,
-      "afterbegin",
-      true,
-    );
+    // apply use new utility function instead of the commented code above
+    renderListWithTemplate(productCardTemplate, this.listElement, list);
+
   }
 
-  sortProducts(sortType) {
-    const sortedProducts = [...this.products];
-
-    switch (sortType) {
-      case "name-asc":
-        sortedProducts.sort((a, b) => a.Name.localeCompare(b.Name));
-        break;
-
-      case "name-desc":
-        sortedProducts.sort((a, b) => b.Name.localeCompare(a.Name));
-        break;
-
-      case "price-asc":
-        sortedProducts.sort((a, b) => a.FinalPrice - b.FinalPrice);
-        break;
-
-      case "price-desc":
-        sortedProducts.sort((a, b) => b.FinalPrice - a.FinalPrice);
-        break;
-    }
-
-    // Re-render with the newly sorted array
-    this.renderList(sortedProducts);
-  }
 }
