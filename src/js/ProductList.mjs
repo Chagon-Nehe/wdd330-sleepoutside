@@ -87,12 +87,12 @@ import { renderListWithTemplate } from "./utils.mjs";
 
 // Helper function to generate HTML template for a single product
 function productCardTemplate(product) {
-  const imageUrl = product.Images?.PrimaryMedium?.Url || "";
+  const imageUrl = product.Images?.PrimaryMedium || product.Image || "";
 
   return `
     <li class="product-card">
       <a href="/product_pages/?product=${product.Id}">
-        <img src="${product.Images.PrimaryMedium}" alt="${product.Name}">
+        <img src="${imageUrl}" alt="${product.Name}">
         <h3>${product.Brand.Name}</h3>
         <p>${product.NameWithoutBrand}</p>
         <p class="product-card__price">$${product.FinalPrice}</p>
@@ -119,7 +119,7 @@ export default class ProductList {
     // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
 
     // apply use new utility function instead of the commented code above
-    renderListWithTemplate(productCardTemplate, this.listElement, list);
+    renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
 
   }
 
