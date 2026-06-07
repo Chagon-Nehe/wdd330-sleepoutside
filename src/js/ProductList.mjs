@@ -85,7 +85,10 @@
 
 import { renderListWithTemplate } from "./utils.mjs";
 
+// Helper function to generate HTML template for a single product
 function productCardTemplate(product) {
+  const imageUrl = product.Images?.PrimaryMedium?.Url || "";
+
   return `
     <li class="product-card">
       <a href="/product_pages/?product=${product.Id}">
@@ -95,7 +98,7 @@ function productCardTemplate(product) {
         <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
     </li>
-    `;
+  `;
 }
 
 export default class ProductList {
