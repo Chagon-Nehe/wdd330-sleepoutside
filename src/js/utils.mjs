@@ -14,6 +14,8 @@ export function getParam(param) {
   return urlParams.get(param);
 }
 
+const qs = (selector) => document.querySelector(selector);
+
 export function renderListWithTemplate(
   template,
   parentElement,
@@ -21,14 +23,12 @@ export function renderListWithTemplate(
   position = "afterbegin",
   clear = false,
 ) {
-  const htmlString = list.map(template);
-
   if (clear) {
     parentElement.innerHTML = " ";
   }
 
   // Convert each item in the list to HTML using the template function
-  const htmlStrings = list.map(templateFn);
+  const htmlStrings = list.map(template);
 
   //Insert the HTML into DOM
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
@@ -57,7 +57,7 @@ export async function loadHeaderFooter() {
       <div class="header-container">
         <div class="logo">
           <img src="/images/noun_Tent_2517.svg" alt="tent image for logo" />
-          <a href="index.html">Sleep<span class="highlight">Outside</span></a>
+          <a href="/index.html">Sleep<span class="highlight">Outside</span></a>
         </div>
         <div class="cart">
           <a href="/cart/index.html">
