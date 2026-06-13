@@ -1,4 +1,4 @@
-const baseURL = "http://server-nodejs.cit.byui.edu:3000/";
+const baseURL = "https://wdd330-backend.onrender.com/";
 async function convertToJson(res) {
   const data = await res.json();
   if (res.ok) {
@@ -10,8 +10,8 @@ async function convertToJson(res) {
 
 export default class ExternalServices {
   constructor(category) {
-    // this.category = category;
-    // this.path = `../json/${this.category}.json`;
+    this.category = category;
+    this.path = `../json/${this.category}.json`;
   }
   async getData(category) {
     const response = await fetch(baseURL + `products/search/${category}`);

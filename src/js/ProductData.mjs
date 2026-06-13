@@ -1,4 +1,10 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+
+const baseURL = import.meta.env.VITE_SERVER_URL ?? "https://wdd330-backend.onrender.com/";
+
+if (!baseURL) {
+  throw new Error("VITE_SERVER_URL is not defined. Check your .env file.");
+}
+
 
 function convertToJson(res) {
   if (res.ok) {
@@ -18,8 +24,11 @@ export default class ProductData {
   }
 
   async findProductById(id) {
+    console.log("Fetching product with id:", id);
     const response = await fetch(`${baseURL}product/${id}`);
     const data = await convertToJson(response);
+    console.log("Raw data from API:", data);
     return data.Result;
   }
 }
+
